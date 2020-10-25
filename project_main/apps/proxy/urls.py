@@ -1,7 +1,7 @@
 from django.urls import re_path
-from .views import proxy_view
+from .views import ProxyView
 
 
 urlpatterns = [
-    re_path(r'^(?P<url>.*)/$', proxy_view)
+    re_path(r'^(?P<url>.*)/$', ProxyView)
 ]

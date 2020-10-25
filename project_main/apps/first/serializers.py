@@ -1,12 +1,24 @@
-from rest_framework.serializers import Serializer, CharField
+from rest_framework import serializers
+from .models import Record, Player
 
 
-class FirstSerializer(Serializer):
-    one_field = CharField()
-    two_field = CharField()
+class PartialModelSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        fields = kwargs.pop('fields', None)
+        super(PartialModelSerializer, self).__init__(*args, **kwargs)
 
-    def create(self, validated_data):
-        raise NotImplementedError()
+        if fields is not None:
+            for field_name in set(self.fields) - set(fields):
+                self.fields.pop(field_name)
 
-    def update(self, instance, validated_data):
-        raise NotImplementedError()
+
+class PlayerSerializer(PartialModelSerializer):
+    class Meta:
+        model = Player
+        fields = '__all__'
+
+
+class RecordSerializer(PartialModelSerializer):
+    class Meta:
+        model = Record
+        fields = '__all__'
